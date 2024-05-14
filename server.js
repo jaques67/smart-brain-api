@@ -16,14 +16,15 @@ app.use(cors());
 const db = knex({
   client: 'pg',
   connection: {
-    host: 'tebulot.zapto.org',
-    port: 5432,
-    user: 'postgres',
-    password: 'R@istlin01',
-    database: 'smart-brain',
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
   },
 });
 
+const { PORT } = process.env;
 
 app.get('/', (req, res) => { res.send(database.users) });
 app.post('/signin', signin.handleSignin(db, bcrypt));
@@ -32,4 +33,4 @@ app.get('/profile/:id', profile.handleProfile(db));
 app.put('/image', image.handleImage(db));
 app.post('/imageurl', image.handleApiCall);
 
-app.listen(3000, () => { console.log('app is running on port 3000') });
+app.listen(PORT, () => { console.log(`app is running on port ${PORT}`) });
